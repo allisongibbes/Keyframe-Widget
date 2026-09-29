@@ -164,10 +164,9 @@
 
   <div class="feedback-text" id="feedbackMessage"></div>
 </div>
-
 <script>
-  // DEFINE THE CORRECT KEYFRAMES HERE (e.g., frames 1, 5, and 10)
-  const correctAnswers = ["2", "4", "8"]; 
+  // DEFINE THE CORRECT KEYFRAMES HERE (Notice there are no quotation marks now!)
+  const correctAnswers = [2, 4, 8]; 
   
   const frames = document.querySelectorAll('.frame');
   const feedbackMsg = document.getElementById('feedbackMessage');
@@ -176,7 +175,6 @@
   // Add click listeners to toggle the 'selected' state
   frames.forEach(frame => {
     frame.addEventListener('click', function() {
-      // Prevent changing selection after the answer has been checked
       if (isChecked) return; 
       this.classList.toggle('selected');
     });
@@ -200,7 +198,12 @@
     // Evaluate each selected frame
     frames.forEach(frame => {
       const isSelected = frame.classList.contains('selected');
-      const isActuallyCorrect = correctAnswers.includes(frame.getAttribute('data-index'));
+      
+      // FOOLPROOF FIX: This strips out any invisible text characters 
+      // and forces the widget to compare pure math numbers.
+      const rawIndex = frame.getAttribute('data-index');
+      const cleanIndex = parseInt(rawIndex, 10); 
+      const isActuallyCorrect = correctAnswers.includes(cleanIndex);
 
       if (isSelected && isActuallyCorrect) {
         frame.classList.add('correct');
@@ -235,3 +238,5 @@
     });
   }
 </script>
+
+
