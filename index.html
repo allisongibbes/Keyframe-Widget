@@ -1,0 +1,237 @@
+<style>
+  .keyframe-widget {
+    font-family: Arial, sans-serif;
+    max-width: 800px;
+    margin: 20px auto;
+    padding: 20px;
+    border: 2px solid #333;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+    text-align: center;
+  }
+
+  .gif-container {
+    margin-bottom: 15px;
+  }
+
+  .gif-container img {
+    max-width: 100%;
+    height: auto;
+    border: 4px solid #ddd;
+    border-radius: 4px;
+  }
+
+  .instructions {
+    font-size: 1.1rem;
+    margin-bottom: 20px;
+    color: #444;
+  }
+
+  .filmstrip {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #222;
+    padding: 15px 10px;
+    border-radius: 6px;
+    overflow-x: auto;
+    gap: 10px;
+  }
+
+  .frame {
+    flex: 0 0 auto;
+    width: 60px;
+    height: 60px;
+    background-color: #fff;
+    border: 4px solid transparent;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: transform 0.2s, border-color 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.8rem;
+    color: #aaa;
+    user-select: none;
+  }
+
+  /* Image styling for when you replace the placeholder text with actual frame images */
+  .frame img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    pointer-events: none;
+  }
+
+  .frame:hover {
+    transform: scale(1.05);
+    border-color: #888;
+  }
+
+  /* Visual state for a user selecting a frame */
+  .frame.selected {
+    border-color: #ffeb3b; /* Yellow highlight */
+    transform: scale(1.1);
+    box-shadow: 0 0 10px rgba(255, 235, 59, 0.5);
+  }
+
+  /* Feedback states after checking the answer */
+  .frame.correct {
+    border-color: #4caf50 !important; /* Green */
+    background-color: #e8f5e9;
+  }
+
+  .frame.incorrect {
+    border-color: #f44336 !important; /* Red */
+    background-color: #ffebee;
+  }
+
+  .button-group {
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+  }
+
+  .action-btn {
+    padding: 10px 20px;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    border: none;
+    border-radius: 4px;
+    transition: background 0.2s;
+  }
+
+  .check-btn {
+    background-color: #1976d2;
+    color: white;
+  }
+
+  .check-btn:hover {
+    background-color: #1565c0;
+  }
+
+  .reset-btn {
+    background-color: #757575;
+    color: white;
+  }
+
+  .reset-btn:hover {
+    background-color: #616161;
+  }
+
+  .feedback-text {
+    margin-top: 15px;
+    font-size: 1.1rem;
+    font-weight: bold;
+    min-height: 24px;
+  }
+  
+  .success { color: #2e7d32; }
+  .error { color: #c62828; }
+</style>
+
+<div class="keyframe-widget">
+  <h2>Identify the Keyframes</h2>
+  
+  <div class="gif-container">
+    <!-- Replace this src with your looping GIF URL -->
+    <img src="https://via.placeholder.com/600x300/42a5f5/ffffff?text=Looping+Animation+GIF" alt="Looping Animation">
+  </div>
+  
+  <p class="instructions">Watch the complex action above. Below is a 10-frame filmstrip of the sequence. Click on the <strong>3 frames</strong> that represent the extreme "keyframes" of the action, separating them from the transitional frames.</p>
+  
+  <!-- Filmstrip containing 10 individual frames -->
+  <div class="filmstrip" id="filmstripContainer">
+    <!-- Replace the text inside with <img src="frame1.jpg"> for your actual frames -->
+    <div class="frame" data-index="1">F1</div>
+    <div class="frame" data-index="2">F2</div>
+    <div class="frame" data-index="3">F3</div>
+    <div class="frame" data-index="4">F4</div>
+    <div class="frame" data-index="5">F5</div>
+    <div class="frame" data-index="6">F6</div>
+    <div class="frame" data-index="7">F7</div>
+    <div class="frame" data-index="8">F8</div>
+    <div class="frame" data-index="9">F9</div>
+    <div class="frame" data-index="10">F10</div>
+  </div>
+
+  <div class="button-group">
+    <button class="action-btn check-btn" onclick="checkAnswers()">Check Answer</button>
+    <button class="action-btn reset-btn" onclick="resetWidget()">Reset</button>
+  </div>
+
+  <div class="feedback-text" id="feedbackMessage"></div>
+</div>
+
+<script>
+  // DEFINE THE CORRECT KEYFRAMES HERE (e.g., frames 1, 5, and 10)
+  const correctAnswers = ["1", "5", "10"]; 
+  
+  const frames = document.querySelectorAll('.frame');
+  const feedbackMsg = document.getElementById('feedbackMessage');
+  let isChecked = false;
+
+  // Add click listeners to toggle the 'selected' state
+  frames.forEach(frame => {
+    frame.addEventListener('click', function() {
+      // Prevent changing selection after the answer has been checked
+      if (isChecked) return; 
+      this.classList.toggle('selected');
+    });
+  });
+
+  function checkAnswers() {
+    if (isChecked) return;
+    
+    const selectedFrames = document.querySelectorAll('.frame.selected');
+    
+    if (selectedFrames.length === 0) {
+      feedbackMsg.textContent = "Please select at least one frame before checking.";
+      feedbackMsg.className = "feedback-text error";
+      return;
+    }
+
+    isChecked = true;
+    let correctCount = 0;
+    let incorrectCount = 0;
+
+    // Evaluate each selected frame
+    frames.forEach(frame => {
+      const isSelected = frame.classList.contains('selected');
+      const isActuallyCorrect = correctAnswers.includes(frame.getAttribute('data-index'));
+
+      if (isSelected && isActuallyCorrect) {
+        frame.classList.add('correct');
+        correctCount++;
+      } else if (isSelected && !isActuallyCorrect) {
+        frame.classList.add('incorrect');
+        incorrectCount++;
+      } else if (!isSelected && isActuallyCorrect) {
+        // Highlight the correct ones they missed
+        frame.style.border = "4px dashed #4caf50"; 
+      }
+    });
+
+    // Provide final text feedback
+    if (correctCount === correctAnswers.length && incorrectCount === 0) {
+      feedbackMsg.textContent = "Perfect! You successfully identified all the extremes of the action.";
+      feedbackMsg.className = "feedback-text success";
+    } else {
+      feedbackMsg.textContent = `You found ${correctCount} out of ${correctAnswers.length} keyframes. Look for the poses where the direction or energy shifts the most!`;
+      feedbackMsg.className = "feedback-text error";
+    }
+  }
+
+  function resetWidget() {
+    isChecked = false;
+    feedbackMsg.textContent = "";
+    feedbackMsg.className = "feedback-text";
+    
+    frames.forEach(frame => {
+      frame.classList.remove('selected', 'correct', 'incorrect');
+      frame.style.border = ""; // Reset inline styles
+    });
+  }
+</script>
