@@ -137,7 +137,7 @@
   
   <div class="gif-container">
     <!-- Replace this src with your looping GIF URL -->
-    <img src="https://via.placeholder.com/600x300/42a5f5/ffffff?text=Looping+Animation+GIF" alt="Looping Animation">
+    <img src="animation.gif" alt="Looping Animation">
   </div>
   
   <p class="instructions">Watch the complex action above. Below is a 10-frame filmstrip of the sequence. Click on the <strong>3 frames</strong> that represent the extreme "keyframes" of the action, separating them from the transitional frames.</p>
@@ -145,16 +145,16 @@
   <!-- Filmstrip containing 10 individual frames -->
   <div class="filmstrip" id="filmstripContainer">
     <!-- Replace the text inside with <img src="frame1.jpg"> for your actual frames -->
-    <div class="frame" data-index="1">F1</div>
-    <div class="frame" data-index="2">F2</div>
-    <div class="frame" data-index="3">F3</div>
-    <div class="frame" data-index="4">F4</div>
-    <div class="frame" data-index="5">F5</div>
-    <div class="frame" data-index="6">F6</div>
-    <div class="frame" data-index="7">F7</div>
-    <div class="frame" data-index="8">F8</div>
-    <div class="frame" data-index="9">F9</div>
-    <div class="frame" data-index="10">F10</div>
+    <div class="frame" data-index="1"><img src="frame1.jpg"></div>
+    <div class="frame" data-index="1"><img src="frame2.jpg"></div>
+    <div class="frame" data-index="1"><img src="frame3.jpg"></div>
+    <div class="frame" data-index="1"><img src="frame4.jpg"></div>
+    <div class="frame" data-index="1"><img src="frame5.jpg"></div>
+    <div class="frame" data-index="1"><img src="frame6.jpg"></div>
+    <div class="frame" data-index="1"><img src="frame7.jpg"></div>
+    <div class="frame" data-index="1"><img src="frame8.jpg"></div>
+    <div class="frame" data-index="1"><img src="frame9.jpg"></div>
+    <div class="frame" data-index="1"><img src="frame10.jpg"></div>
   </div>
 
   <div class="button-group">
@@ -167,7 +167,7 @@
 
 <script>
   // DEFINE THE CORRECT KEYFRAMES HERE (e.g., frames 1, 5, and 10)
-  const correctAnswers = ["1", "5", "10"]; 
+  const correctAnswers = ["2", "4", "8"]; 
   
   const frames = document.querySelectorAll('.frame');
   const feedbackMsg = document.getElementById('feedbackMessage');
